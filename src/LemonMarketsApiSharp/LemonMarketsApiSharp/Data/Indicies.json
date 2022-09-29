@@ -18,11 +18,6 @@
           "ISIN": "DE000BASF111"
         },
         {
-          "Name": "BASF",
-          "Symbol": "",
-          "ISIN": "DE000BASF111"
-        },
-        {
           "Name": "Bayer",
           "Symbol": "",
           "ISIN": "DE000BAY0017"
@@ -63,7 +58,7 @@
           "ISIN": "DE0005140008"
         },
         {
-          "Name": "Deutsche Börse",
+          "Name": "Deutsche Bï¿½rse",
           "Symbol": "",
           "ISIN": "DE0005810055"
         },
@@ -93,7 +88,7 @@
           "ISIN": "DE0005785802"
         },
         {
-          "Name": "Hannover Rück",
+          "Name": "Hannover Rï¿½ck",
           "Symbol": "",
           "ISIN": "DE0008402215"
         },
@@ -138,7 +133,7 @@
           "ISIN": "DE000A0D9PT0"
         },
         {
-          "Name": "Münchener Rückversicherungs-Gesellschaft",
+          "Name": "Mï¿½nchener Rï¿½ckversicherungs-Gesellschaft",
           "Symbol": "",
           "ISIN": "DE0008430026"
         },

@@ -1,4 +1,6 @@
-﻿namespace AndreasReitberger.API
+﻿using AndreasReitberger.API.Structs;
+
+namespace AndreasReitberger.API
 {
     public partial class LemonMarketsClient
     {
@@ -13,6 +15,24 @@
             public LemonMarketsClient Build()
             {
                 return _client;
+            }
+           
+            public LemonMarketsConnectionBuilder WithPaperTrading()
+            {
+                _client.Address = LemonMarketsAPIs.PaperTradingAPI;
+                return this;
+            }
+           
+            public LemonMarketsConnectionBuilder WithLiveTrading()
+            {
+                _client.Address = LemonMarketsAPIs.LiveTradingAPI;
+                return this;
+            }
+           
+            public LemonMarketsConnectionBuilder WithMarketTrading()
+            {
+                _client.Address = LemonMarketsAPIs.MarketDataAPI;
+                return this;
             }
            
             public LemonMarketsConnectionBuilder WithWebAddress(string webAddress)

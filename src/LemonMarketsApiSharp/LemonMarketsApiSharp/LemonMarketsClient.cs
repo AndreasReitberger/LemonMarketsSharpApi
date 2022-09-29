@@ -3,15 +3,12 @@ using AndreasReitberger.API.Models.REST;
 using AndreasReitberger.API.Models.REST.Events;
 using AndreasReitberger.API.Models.REST.Respones;
 using AndreasReitberger.API.Structs;
-using AndreasReitberger.Core.Interfaces;
 using AndreasReitberger.Core.Utilities;
 using Newtonsoft.Json;
 using RestSharp;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.IO;
-using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Security;
@@ -676,8 +673,8 @@ namespace AndreasReitberger.API
                 Dictionary<string, string> parameters = new();
 
                 if (!string.IsNullOrEmpty(isin)) parameters.Add("isin", isin);
-                if (!string.IsNullOrEmpty(search)) parameters.Add("search", isin);
-                if (!string.IsNullOrEmpty(type)) parameters.Add("type", isin);
+                if (!string.IsNullOrEmpty(search)) parameters.Add("search", search);
+                if (!string.IsNullOrEmpty(type)) parameters.Add("type", type);
 
                 result = await SendRestApiRequestAsync(
                    function: LemonMarketsEndpoints.instruments,
@@ -757,11 +754,13 @@ namespace AndreasReitberger.API
             try
             {
                 // Always seems to be a CSV
-                Dictionary<string, string> parameters = new();
-                parameters.Add("isin", isin);
-                parameters.Add("decimals", decimals.ToString());
-                parameters.Add("epoch", epoch.ToString());
-                if(!string.IsNullOrEmpty(mic)) parameters.Add("mic", mic);
+                Dictionary<string, string> parameters = new()
+                {
+                    { "isin", isin },
+                    { "decimals", decimals.ToString() },
+                    { "epoch", epoch.ToString() }
+                };
+                if (!string.IsNullOrEmpty(mic)) parameters.Add("mic", mic);
 
                 result = await SendRestApiRequestAsync(
                    function: LemonMarketsEndpoints.quotes,
@@ -791,6 +790,98 @@ namespace AndreasReitberger.API
             }
         }
 
+        public async Task<LemonMarketsOHLCRespone> GetOHLCAsync(string isin, LemonMarketsIntervals interval, int fromIsoDate = -1, int toIsoDate = -1, bool decimals = true, bool epoch = false)
+        {
+            LemonMarketsOHLCRespone returnValue = new();
+            LemonMarketsApiRequestRespone result = new();
+            try
+            {
+                // Always seems to be a CSV
+                Dictionary<string, string> parameters = new()
+                {
+                    { "isin", isin },
+                    { "decimals", decimals.ToString() },
+                    { "epoch", epoch.ToString() }
+                };
+                if (toIsoDate > -1) parameters.Add("to", toIsoDate.ToString());
+                if (fromIsoDate > -1) parameters.Add("from", fromIsoDate.ToString());
+                
+                string command = interval switch
+                {
+                    LemonMarketsIntervals.PerMinute => "m1",
+                    LemonMarketsIntervals.PerHour => "h1",
+                    _ => "d1",
+                };
+                result = await SendRestApiRequestAsync(
+                   function: LemonMarketsEndpoints.ohlc,
+                   command: command,
+                   additionalParameters: parameters
+                   )
+                    .ConfigureAwait(false);
+
+                LemonMarketsOHLCRespone info = JsonConvert.DeserializeObject<LemonMarketsOHLCRespone>(result.Result);
+                return info;
+            }
+            catch (JsonException jecx)
+            {
+                OnError(new LemonMarketsJsonConvertEventArgs()
+                {
+                    Exception = jecx,
+                    OriginalString = result.Result,
+                    TargetType = nameof(IsOnline),
+                    Message = jecx.Message,
+                });
+                return returnValue;
+            }
+            catch (Exception exc)
+            {
+                OnError(new UnhandledExceptionEventArgs(exc, false));
+                return returnValue;
+            }
+        }
+
+        public async Task<LemonMarketsTradesRespone> GetTradesAsync(string isin, string mic = "", bool decimals = true, bool epoch = false, bool latest = true)
+        {
+            LemonMarketsTradesRespone returnValue = new();
+            LemonMarketsApiRequestRespone result = new();
+            try
+            {
+                // Always seems to be a CSV
+                Dictionary<string, string> parameters = new()
+                {
+                    { "isin", isin },
+                    { "decimals", decimals.ToString() },
+                    { "epoch", epoch.ToString() }
+                };
+                if (!string.IsNullOrEmpty(mic)) parameters.Add("mic", mic);
+
+                result = await SendRestApiRequestAsync(
+                   function: LemonMarketsEndpoints.trades,
+                   command: latest ? "latest" : "",
+                   additionalParameters: parameters
+                   )
+                    .ConfigureAwait(false);
+
+                LemonMarketsTradesRespone info = JsonConvert.DeserializeObject<LemonMarketsTradesRespone>(result.Result);
+                return info;
+            }
+            catch (JsonException jecx)
+            {
+                OnError(new LemonMarketsJsonConvertEventArgs()
+                {
+                    Exception = jecx,
+                    OriginalString = result.Result,
+                    TargetType = nameof(IsOnline),
+                    Message = jecx.Message,
+                });
+                return returnValue;
+            }
+            catch (Exception exc)
+            {
+                OnError(new UnhandledExceptionEventArgs(exc, false));
+                return returnValue;
+            }
+        }
         #endregion
 
         #endregion

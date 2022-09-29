@@ -1,4 +1,5 @@
 using AndreasReitberger.API;
+using AndreasReitberger.API.Enums;
 using AndreasReitberger.API.Structs;
 using NUnit.Framework;
 using System;
@@ -46,8 +47,11 @@ namespace AlphaVantageStocksApiSharp.Test
                 await client.CheckOnlineAsync();
                 Assert.IsTrue(client.IsOnline);
 
-                var instruments = await client.GetInstrumentsAsync(new List<string>() { LemonMarketsSymbols.BASF, LemonMarketsSymbols.MercedesBenzAG });
+                var instruments = await client.GetInstrumentsAsync(new List<string>() { LemonMarketsSymbols.BASF, LemonMarketsSymbols.MercedesBenzGroup });
                 Assert.IsTrue(instruments?.Results?.Count > 0);
+
+                var searchResult = await client.GetInstrumentsAsync("", "BASF");
+                Assert.IsTrue(searchResult?.Results?.Count > 0);
             }
             catch(Exception exc)
             {
@@ -88,8 +92,50 @@ namespace AlphaVantageStocksApiSharp.Test
                 await client.CheckOnlineAsync();
                 Assert.IsTrue(client.IsOnline);
 
-                var venues = await client.GetQuotesAsync(LemonMarketsSymbols.BASF);
-                Assert.IsTrue(venues?.Results?.Count > 0);
+                var quotes = await client.GetQuotesAsync(LemonMarketsSymbols.BASF);
+                Assert.IsTrue(quotes?.Results?.Count > 0);
+            }
+            catch(Exception exc)
+            {
+                Assert.Fail(exc.Message);
+            }
+        }
+
+        [Test]
+        public async Task GetOHLCTest()
+        {
+            try
+            {
+                LemonMarketsClient client = new LemonMarketsClient.LemonMarketsConnectionBuilder()
+                    .WithWebAddressAndApiKey(webAddress: LemonMarketsAPIs.MarketDataAPI, apiKey: api)
+                    .Build();
+                Assert.IsNotNull(client);
+                await client.CheckOnlineAsync();
+                Assert.IsTrue(client.IsOnline);
+
+                var ohlc = await client.GetOHLCAsync(LemonMarketsSymbols.BASF, LemonMarketsIntervals.PerDay);
+                Assert.IsTrue(ohlc?.Results?.Count > 0);
+            }
+            catch(Exception exc)
+            {
+                Assert.Fail(exc.Message);
+            }
+        }
+
+        [Test]
+        public async Task GetTradeTest()
+        {
+            try
+            {
+                LemonMarketsClient client = new LemonMarketsClient.LemonMarketsConnectionBuilder()
+                    .WithWebAddressAndApiKey(webAddress: LemonMarketsAPIs.MarketDataAPI, apiKey: api)
+                    .Build();
+                Assert.IsNotNull(client);
+                await client.CheckOnlineAsync();
+                Assert.IsTrue(client.IsOnline);
+
+                var trades = await client.GetTradesAsync(LemonMarketsSymbols.BASF);
+                Assert.IsTrue(trades?.Results?.Count > 0);
             }
             catch(Exception exc)
             {
