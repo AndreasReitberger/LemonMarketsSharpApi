@@ -1,0 +1,219 @@
+{
+  "GlobalIndicies": 
+    {
+      "DAX": [
+        {
+          "Name": "Airbus",
+          "Symbol": "",
+          "ISIN": "NL0000235190"
+        },
+        {
+          "Name": "Alianz",
+          "Symbol": "",
+          "ISIN": "DE0008404005"
+        },
+        {
+          "Name": "BASF",
+          "Symbol": "",
+          "ISIN": "DE000BASF111"
+        },
+        {
+          "Name": "BASF",
+          "Symbol": "",
+          "ISIN": "DE000BASF111"
+        },
+        {
+          "Name": "Bayer",
+          "Symbol": "",
+          "ISIN": "DE000BAY0017"
+        },
+        {
+          "Name": "Beiersdorf",
+          "Symbol": "",
+          "ISIN": "DE0005200000"
+        },
+        {
+          "Name": "BMW",
+          "Symbol": "",
+          "ISIN": "DE0005190003"
+        },
+        {
+          "Name": "Brenntag",
+          "Symbol": "",
+          "ISIN": "DE000A1DAHH0"
+        },
+        {
+          "Name": "Continental",
+          "Symbol": "",
+          "ISIN": "DE0005439004"
+        },
+        {
+          "Name": "Covestro",
+          "Symbol": "",
+          "ISIN": "DE0006062144"
+        },
+        {
+          "Name": "Daimler Truck",
+          "Symbol": "",
+          "ISIN": "DE000DTR0CK8"
+        },
+        {
+          "Name": "Deutsche Bank",
+          "Symbol": "",
+          "ISIN": "DE0005140008"
+        },
+        {
+          "Name": "Deutsche Börse",
+          "Symbol": "",
+          "ISIN": "DE0005810055"
+        },
+        {
+          "Name": "Deutsche Post",
+          "Symbol": "",
+          "ISIN": "DE0005552004"
+        },
+        {
+          "Name": "Deutsche Telekom",
+          "Symbol": "",
+          "ISIN": "DE0005557508"
+        },
+        {
+          "Name": "E.ON",
+          "Symbol": "",
+          "ISIN": "DE000ENAG999"
+        },
+        {
+          "Name": "Fresenius",
+          "Symbol": "",
+          "ISIN": "DE0005785604"
+        },
+        {
+          "Name": "Fresenius Medical Care",
+          "Symbol": "",
+          "ISIN": "DE0005785802"
+        },
+        {
+          "Name": "Hannover Rück",
+          "Symbol": "",
+          "ISIN": "DE0008402215"
+        },
+        {
+          "Name": "HeidelbergCement",
+          "Symbol": "",
+          "ISIN": "DE0006047004"
+        },
+        {
+          "Name": "HelloFresh",
+          "Symbol": "",
+          "ISIN": "DE000A161408"
+        },
+        {
+          "Name": "Henkel vz.",
+          "Symbol": "",
+          "ISIN": "DE0006048432"
+        },
+        {
+          "Name": "Infineon",
+          "Symbol": "",
+          "ISIN": "DE0006231004"
+        },
+        {
+          "Name": "Linde",
+          "Symbol": "",
+          "ISIN": "IE00BZ12WP82"
+        },
+        {
+          "Name": "Mercedes-Benz Group",
+          "Symbol": "",
+          "ISIN": "DE0007100000"
+        },
+        {
+          "Name": "Merck",
+          "Symbol": "",
+          "ISIN": "DE0006599905"
+        },
+        {
+          "Name": "MTU Aero Engines",
+          "Symbol": "",
+          "ISIN": "DE000A0D9PT0"
+        },
+        {
+          "Name": "Münchener Rückversicherungs-Gesellschaft",
+          "Symbol": "",
+          "ISIN": "DE0008430026"
+        },
+        {
+          "Name": "Porsche",
+          "Symbol": "",
+          "ISIN": "DE000PAH0038"
+        },
+        {
+          "Name": "Puma",
+          "Symbol": "",
+          "ISIN": "DE0006969603"
+        },
+        {
+          "Name": "QIAGEN",
+          "Symbol": "",
+          "ISIN": "NL0012169213"
+        },
+        {
+          "Name": "RWE",
+          "Symbol": "",
+          "ISIN": "DE0007037129"
+        },
+        {
+          "Name": "SAP",
+          "Symbol": "",
+          "ISIN": "DE0007164600"
+        },
+        {
+          "Name": "Sartorius vz.",
+          "Symbol": "",
+          "ISIN": "DE0007165631"
+        },
+        {
+          "Name": "Siemens",
+          "Symbol": "",
+          "ISIN": "DE0007236101"
+        },
+        {
+          "Name": "Siemens Healthineers",
+          "Symbol": "",
+          "ISIN": "DE000SHL1006"
+        },
+        {
+          "Name": "Symrise",
+          "Symbol": "",
+          "ISIN": "DE000SYM9999"
+        },
+        {
+          "Name": "Volkswagen (VW) vz.",
+          "Symbol": "",
+          "ISIN": "DE0007664039"
+        },
+        {
+          "Name": "Vonovia",
+          "Symbol": "",
+          "ISIN": "DE000A1ML7J1"
+        },
+        {
+          "Name": "Zalando",
+          "Symbol": "",
+          "ISIN": "DE000ZAL1111"
+        }
+      ],
+      "DOW": [
+        {
+          "Name": "3M",
+          "Symbol": "",
+          "ISIN": ""
+        },
+        {
+          "Name": "Apple",
+          "Symbol": "",
+          "ISIN": ""
+        }
+      ]
+    }
+}

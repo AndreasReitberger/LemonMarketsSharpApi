@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.32802.440
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LemonMarketsApiSharp", "LemonMarketsApiSharp\LemonMarketsApiSharp.csproj", "{9782E6D7-37C2-401A-B375-F2716A70D65D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LemonMarketsApiSharp.Test", "LemonMarketsApiSharp.Test\LemonMarketsApiSharp.Test.csproj", "{E6617451-4B90-40EE-99B5-70AA6BDE9E0A}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{9782E6D7-37C2-401A-B375-F2716A70D65D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9782E6D7-37C2-401A-B375-F2716A70D65D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9782E6D7-37C2-401A-B375-F2716A70D65D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9782E6D7-37C2-401A-B375-F2716A70D65D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E6617451-4B90-40EE-99B5-70AA6BDE9E0A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E6617451-4B90-40EE-99B5-70AA6BDE9E0A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E6617451-4B90-40EE-99B5-70AA6BDE9E0A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E6617451-4B90-40EE-99B5-70AA6BDE9E0A}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {68B3412C-CA1A-4BD8-8604-5F6C4497231F}
+	EndGlobalSection
+EndGlobal

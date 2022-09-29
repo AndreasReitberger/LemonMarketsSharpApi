@@ -1,0 +1,35 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFrameworks>netstandard2.1;net6</TargetFrameworks>
+    <RootNamespace>AndreasReitberger.API</RootNamespace>
+	  <LangVersion>9.0</LangVersion>
+	  <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+	  <Title>$(AssemblyName)</Title>
+	  <Authors>Andreas Reitberger</Authors>
+	  <Description>A C# client to interact with the Alpha Vantage Stocks API.</Description>
+	  <Copyright>Andreas Reitberger</Copyright>
+	  <PackageProjectUrl>https://github.com/AndreasReitberger/AlphaVantageStocksApiSharp</PackageProjectUrl>
+	  <RepositoryUrl>https://github.com/AndreasReitberger/AlphaVantageStocksApiSharp</RepositoryUrl>
+	  <RepositoryType>git</RepositoryType>
+	  <PackageTags>Lemon,Markets,API,Stocks,ETF,Web,C#,Sharp,csharp</PackageTags>
+	  <AssemblyVersion>1.0.0</AssemblyVersion>
+	  <FileVersion>1.0.0</FileVersion>
+	  <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
+	  <PackageReadmeFile>README.md</PackageReadmeFile>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="RCoreSharp" Version="1.0.8" />
+    <PackageReference Include="RestSharp" Version="108.0.2" />
+    <PackageReference Include="System.Memory" Version="4.5.5" />
+	<None Include="..\..\..\README.md" Pack="true" PackagePath="\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="Data\Indicies.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
+</Project>
