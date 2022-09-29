@@ -1,6 +1,12 @@
 # LemonMarketsSharpApi
 A C# wrapper around the Lemon Markets Stocks &amp; ETF API (https://docs.lemon.markets/)
 
+# Nuget
+Get the latest version from nuget.org<br>
+[![NuGet](https://img.shields.io/nuget/v/LemonMarketsApiSharp.svg?style=flat-square&label=nuget)](https://www.nuget.org/packages/LemonMarketsApiSharp/)
+[![NuGet](https://img.shields.io/nuget/dt/LemonMarketsApiSharp.svg)](https://www.nuget.org/packages/LemonMarketsApiSharp)
+
+
 # Usage
 Some usage examples.
 
