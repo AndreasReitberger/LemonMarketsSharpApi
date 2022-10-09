@@ -29,7 +29,7 @@ namespace AndreasReitberger.API
                 return this;
             }
            
-            public LemonMarketsConnectionBuilder WithMarketTrading()
+            public LemonMarketsConnectionBuilder WithMarketData()
             {
                 _client.Address = LemonMarketsAPIs.MarketDataAPI;
                 return this;

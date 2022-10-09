@@ -790,7 +790,7 @@ namespace AndreasReitberger.API
             }
         }
 
-        public async Task<LemonMarketsOHLCRespone> GetOHLCAsync(string isin, LemonMarketsIntervals interval, int fromIsoDate = -1, int toIsoDate = -1, bool decimals = true, bool epoch = false)
+        public async Task<LemonMarketsOHLCRespone> GetOHLCAsync(string isin, LemonMarketsIntervals interval, string fromIsoDateString = "", string toIsoDateString = "", bool decimals = true, bool epoch = false)
         {
             LemonMarketsOHLCRespone returnValue = new();
             LemonMarketsApiRequestRespone result = new();
@@ -799,12 +799,12 @@ namespace AndreasReitberger.API
                 // Always seems to be a CSV
                 Dictionary<string, string> parameters = new()
                 {
-                    { "isin", isin },
-                    { "decimals", decimals.ToString() },
-                    { "epoch", epoch.ToString() }
+                    { "isin", isin.Trim() },
+                    { "decimals", decimals.ToString().ToLower() },
+                    { "epoch", epoch.ToString().ToLower() }
                 };
-                if (toIsoDate > -1) parameters.Add("to", toIsoDate.ToString());
-                if (fromIsoDate > -1) parameters.Add("from", fromIsoDate.ToString());
+                if (!string.IsNullOrEmpty(toIsoDateString)) parameters.Add("to", toIsoDateString);
+                if (!string.IsNullOrEmpty(fromIsoDateString)) parameters.Add("from", fromIsoDateString);
                 
                 string command = interval switch
                 {
@@ -838,6 +838,34 @@ namespace AndreasReitberger.API
                 OnError(new UnhandledExceptionEventArgs(exc, false));
                 return returnValue;
             }
+        }
+        public async Task<LemonMarketsOHLCRespone> GetOHLCAsync(string isin, LemonMarketsIntervals interval, int fromIsoDate = -1, int toIsoDate = -1, bool decimals = true, bool epoch = false)
+        {
+            return await GetOHLCAsync(
+                isin: isin,
+                interval: interval,
+                fromIsoDate > -1 ? fromIsoDate.ToString() : "",
+                toIsoDate > -1 ? toIsoDate.ToString() : "",
+                decimals,
+                epoch)
+                .ConfigureAwait(false);
+        }
+        
+        public async Task<LemonMarketsOHLCRespone> GetOHLCAsync(List<string> isins, LemonMarketsIntervals interval, int fromIsoDate = -1, int toIsoDate = -1, bool decimals = true, bool epoch = false)
+        {
+            return await GetOHLCAsync(isin: string.Join(",", isins),interval: interval, fromIsoDate, toIsoDate, decimals, epoch).ConfigureAwait(false);
+        }
+        public async Task<LemonMarketsOHLCRespone> GetOHLCAsync(List<string> isins, LemonMarketsIntervals interval, string fromIsoDateString = "", string toIsoDateString = "", bool decimals = true, bool epoch = false)
+        {
+            return await GetOHLCAsync(isin: string.Join(",", isins),interval: interval, fromIsoDateString, toIsoDateString, decimals, epoch).ConfigureAwait(false);
+        }
+        public async Task<LemonMarketsOHLCRespone> GetOHLCAsync(List<string> isins, LemonMarketsIntervals interval, DateTime fromDate, DateTime toDate, bool decimals = true, bool epoch = false)
+        {
+            return await GetOHLCAsync(isin: string.Join(",", isins), interval: interval, fromDate.ToString("yyyy-MM-ddTHH:mm:ss"), toDate.ToString("yyyy-MM-ddTHH:mm:ss"), decimals, epoch).ConfigureAwait(false);
+        }
+        public async Task<LemonMarketsOHLCRespone> GetOHLCAsync(string isin, LemonMarketsIntervals interval, DateTime fromDate, DateTime toDate, bool decimals = true, bool epoch = false)
+        {
+            return await GetOHLCAsync(isin: isin, interval: interval, fromDate.ToString("yyyy-MM-ddTHH:mm:ss"), toDate.ToString("yyyy-MM-ddTHH:mm:ss"), decimals, epoch).ConfigureAwait(false);
         }
 
         public async Task<LemonMarketsTradesRespone> GetTradesAsync(string isin, string mic = "", bool decimals = true, bool epoch = false, bool latest = true)

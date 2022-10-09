@@ -6,7 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace AlphaVantageStocksApiSharp.Test
+namespace LemonMarketsStocksApiSharp.Test
 {
     public class Tests
     {

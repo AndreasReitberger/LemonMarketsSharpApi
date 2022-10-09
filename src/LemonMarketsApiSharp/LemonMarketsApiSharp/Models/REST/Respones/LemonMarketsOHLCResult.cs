@@ -11,7 +11,7 @@ namespace AndreasReitberger.API.Models.REST.Respones
         #region Properties
         [JsonProperty("isin")]
         /// This is the International Securities Identification Number of the instrument you requested the quotes for.
-        public string Isin { get; set; }
+        public string ISIN { get; set; }
 
         [JsonProperty("o")]
         /// This is the Open Price in the specific time period
@@ -43,7 +43,7 @@ namespace AndreasReitberger.API.Models.REST.Respones
 
         [JsonProperty("mic")]
         /// This is the Market Identifier Code of the Trading Venue the OHLC data occured at
-        public string Mic { get; set; }
+        public string MIC { get; set; }
         #endregion
 
         #region Overrides
