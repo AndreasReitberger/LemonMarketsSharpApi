@@ -54,6 +54,21 @@ namespace AndreasReitberger.API
         #endregion
 
         #region Properties
+        [JsonProperty(nameof(Api))]
+        LemonMarketsAPIEndpoints api = LemonMarketsAPIEndpoints.Undefined;
+        [JsonIgnore]
+        public LemonMarketsAPIEndpoints Api
+        {
+            get => api;
+            private set
+            {
+                if (api == value)
+                    return;
+                api = value;
+                OnPropertyChanged();
+            }
+        }
+
         [JsonProperty(nameof(ApiKey))]
         string apiKey = "";
         [JsonIgnore]
@@ -81,6 +96,7 @@ namespace AndreasReitberger.API
                     return;
                 address = value;
                 OnPropertyChanged();
+                UpdateApiEndpoint();
             }
         }
 
@@ -377,13 +393,27 @@ namespace AndreasReitberger.API
                 string uriString = Address;
                 try
                 {
-                    // Send a blank api request in order to check if the server is reachable
-                    LemonMarketsApiRequestRespone respone = await SendOnlineCheckRestApiRequestAsync(
-                       function: LemonMarketsEndpoints.instruments,
-                       additionalParameters: new Dictionary<string, string>() { { "isin", LemonMarketsSymbols.BASF } },
-                       cts: cts)
-                    .ConfigureAwait(false);
-
+                    // Send a pseudo api request, depending on what API endpoint is used.
+                    LemonMarketsApiRequestRespone respone = Api switch
+                    {
+                        LemonMarketsAPIEndpoints.LiveTrading or LemonMarketsAPIEndpoints.PaperTrading =>
+                            await SendOnlineCheckRestApiRequestAsync(
+                                function: LemonMarketsEndpoints.account,
+                                additionalParameters: null,
+                                cts: cts)
+                            .ConfigureAwait(false),
+                        LemonMarketsAPIEndpoints.LiveStreaming =>
+                            await SendOnlineCheckRestApiRequestAsync(
+                                function: LemonMarketsEndpoints.account,
+                                additionalParameters: null,
+                                cts: cts)
+                             .ConfigureAwait(false),
+                        _ => await SendOnlineCheckRestApiRequestAsync(
+                                function: LemonMarketsEndpoints.instruments,
+                                additionalParameters: new Dictionary<string, string>() { { "isin", LemonMarketsSymbols.BASF } },
+                                cts: cts)
+                             .ConfigureAwait(false),
+                    };
                     isReachable = respone?.IsOnline == true;
                 }
                 catch (InvalidOperationException iexc)
@@ -477,7 +507,8 @@ namespace AndreasReitberger.API
                 }
                 if(!string.IsNullOrEmpty(jsonDataString))
                 {
-                    _ = request.AddParameter("data", jsonDataString, ParameterType.QueryString);
+                    //_ = request.AddParameter("data", jsonDataString, ParameterType.QueryString);
+                    _ = request.AddJsonBody(jsonDataString);
                 }
 
                 Uri fullUri = restClient.BuildUri(request);
@@ -656,9 +687,555 @@ namespace AndreasReitberger.API
         }
         #endregion
 
+        #region Misc
+        void UpdateApiEndpoint()
+        {
+            try
+            {
+                string address = Address?.ToLower();
+                if (string.IsNullOrEmpty(address))
+                {
+                    Api = LemonMarketsAPIEndpoints.Undefined;
+                }
+                else if (address.StartsWith("https://paper-trading."))
+                {
+                    Api = LemonMarketsAPIEndpoints.PaperTrading;
+                }
+                else if (address.StartsWith("https://trading."))
+                {
+                    Api = LemonMarketsAPIEndpoints.LiveTrading;
+                }
+                else if (address.StartsWith("https://realtime."))
+                {
+                    Api = LemonMarketsAPIEndpoints.LiveStreaming;
+                }
+                else if (address.StartsWith("https://data."))
+                {
+                    Api = LemonMarketsAPIEndpoints.MarketData;
+                }
+                else
+                {
+                    Api = LemonMarketsAPIEndpoints.Undefined;
+                }
+            }
+            catch (Exception exc)
+            {
+                OnError(new UnhandledExceptionEventArgs(exc, false));
+                Api = LemonMarketsAPIEndpoints.Undefined;
+            }
+        }
+        #endregion
+
         #region Public
 
         #region Trading API
+
+        #region Account
+
+        public async Task<LemonMarketsAccountInfoRespone> GetAccountInformationAsync()
+        {
+            LemonMarketsAccountInfoRespone returnValue = new();
+            LemonMarketsApiRequestRespone result = new();
+            try
+            {
+                result = await SendRestApiRequestAsync(
+                   function: LemonMarketsEndpoints.account,
+                   additionalParameters: null
+                   )
+                    .ConfigureAwait(false);
+
+                LemonMarketsAccountInfoRespone info = JsonConvert.DeserializeObject<LemonMarketsAccountInfoRespone>(result.Result);
+                return info;
+            }
+            catch (JsonException jecx)
+            {
+                OnError(new LemonMarketsJsonConvertEventArgs()
+                {
+                    Exception = jecx,
+                    OriginalString = result.Result,
+                    TargetType = nameof(IsOnline),
+                    Message = jecx.Message,
+                });
+                return returnValue;
+            }
+            catch (Exception exc)
+            {
+                OnError(new UnhandledExceptionEventArgs(exc, false));
+                return returnValue;
+            }
+        }
+
+        #region Withdrawals
+
+        // https://docs.lemon.markets/trading/account#withdrawals
+        public async Task<LemonMarketsRespone> WithdrawalAsync(int amount, int pin, string idempotency = "")
+        {
+            LemonMarketsRespone returnValue = new();
+            LemonMarketsApiRequestRespone result = new();
+            try
+            {
+                object jsonData = string.IsNullOrEmpty(idempotency) ? new
+                {
+                    amount,
+                    pin,
+                } : 
+                new
+                {
+                    amount,
+                    pin,
+                    idempotency,
+                }
+                ;
+
+                result = await SendRestApiRequestAsync(
+                   function: LemonMarketsEndpoints.account,
+                   command: "withdrawals",
+                   jsonData: jsonData,
+                   method: Method.Post                   
+                   )
+                    .ConfigureAwait(false);
+
+                LemonMarketsRespone info = JsonConvert.DeserializeObject<LemonMarketsRespone>(result.Result);
+                return info;
+            }
+            catch (JsonException jecx)
+            {
+                OnError(new LemonMarketsJsonConvertEventArgs()
+                {
+                    Exception = jecx,
+                    OriginalString = result.Result,
+                    TargetType = nameof(IsOnline),
+                    Message = jecx.Message,
+                });
+                return returnValue;
+            }
+            catch (Exception exc)
+            {
+                OnError(new UnhandledExceptionEventArgs(exc, false));
+                return returnValue;
+            }
+        }
+
+        public async Task<LemonMarketsRespone> WithdrawalMoneyAsync(int amountOfMoney, int pin, string idempotency = "")
+        {
+            return await WithdrawalAsync(amountOfMoney * 10000, pin, idempotency).ConfigureAwait(false);
+        }
+
+        #endregion
+
+        #region Bank Statements
+
+        // https://docs.lemon.markets/trading/account#bank-statements
+        public async Task<LemonMarketsBankStatementsRespone> GetBankStatementsAsync(string type, string fromIsoDateString = "", string toIsoDateString = "", string sorting = "", int limit = 10, int page = 0)
+        {
+            LemonMarketsBankStatementsRespone returnValue = new();
+            LemonMarketsApiRequestRespone result = new();
+            try
+            {
+                Dictionary<string, string> parameters = new();
+
+                if (!string.IsNullOrEmpty(type)) parameters.Add("type", type);
+                if (!string.IsNullOrEmpty(toIsoDateString)) parameters.Add("to", toIsoDateString);
+                if (!string.IsNullOrEmpty(fromIsoDateString)) parameters.Add("from", fromIsoDateString);
+                if (!string.IsNullOrEmpty(sorting)) parameters.Add("sorting", sorting);
+
+                if (limit != 100) parameters.Add("limit", limit.ToString());
+                if (page > 0) parameters.Add("page", page.ToString());
+
+                result = await SendRestApiRequestAsync(
+                   function: LemonMarketsEndpoints.account,
+                   command: "bankstatements",
+                   additionalParameters: parameters
+                   )
+                    .ConfigureAwait(false);
+
+                LemonMarketsBankStatementsRespone info = JsonConvert.DeserializeObject<LemonMarketsBankStatementsRespone>(result.Result);
+                return info;
+            }
+            catch (JsonException jecx)
+            {
+                OnError(new LemonMarketsJsonConvertEventArgs()
+                {
+                    Exception = jecx,
+                    OriginalString = result.Result,
+                    TargetType = nameof(IsOnline),
+                    Message = jecx.Message,
+                });
+                return returnValue;
+            }
+            catch (Exception exc)
+            {
+                OnError(new UnhandledExceptionEventArgs(exc, false));
+                return returnValue;
+            }
+        }
+
+        public async Task<LemonMarketsBankStatementsRespone> GetBankStatementsAsync(string type, DateTime fromDate, DateTime toDate, string sorting = "", int limit = 10, int page = 1)
+        {
+            return await GetBankStatementsAsync(type, fromDate.ToString("yyyy-MM-ddTHH:mm:ss"), toDate.ToString("yyyy-MM-ddTHH:mm:ss"), sorting, limit, page)
+                .ConfigureAwait(false);
+        }
+
+        #endregion
+
+        #region Documents
+        // https://docs.lemon.markets/trading/account#get-documents
+        public async Task<LemonMarketsDocumentsRespone> GetDocumentsAsync()
+        {
+            LemonMarketsDocumentsRespone returnValue = new();
+            LemonMarketsApiRequestRespone result = new();
+            try
+            {
+
+                result = await SendRestApiRequestAsync(
+                   function: LemonMarketsEndpoints.account,
+                   command: "documents",
+                   additionalParameters: null
+                   )
+                    .ConfigureAwait(false);
+
+                LemonMarketsDocumentsRespone info = JsonConvert.DeserializeObject<LemonMarketsDocumentsRespone>(result.Result);
+                return info;
+            }
+            catch (JsonException jecx)
+            {
+                OnError(new LemonMarketsJsonConvertEventArgs()
+                {
+                    Exception = jecx,
+                    OriginalString = result.Result,
+                    TargetType = nameof(IsOnline),
+                    Message = jecx.Message,
+                });
+                return returnValue;
+            }
+            catch (Exception exc)
+            {
+                OnError(new UnhandledExceptionEventArgs(exc, false));
+                return returnValue;
+            }
+        }
+
+        public async Task<LemonMarketsDocumentsResult> GetDocumentAsync(string id)
+        {
+            LemonMarketsDocumentsResult returnValue = new();
+            LemonMarketsApiRequestRespone result = new();
+            try
+            {
+
+                result = await SendRestApiRequestAsync(
+                   function: LemonMarketsEndpoints.account,
+                   command: $"documents/{id}",
+                   additionalParameters: null
+                   )
+                    .ConfigureAwait(false);
+
+                LemonMarketsDocumentsResult info = JsonConvert.DeserializeObject<LemonMarketsDocumentsResult>(result.Result);
+                return info;
+            }
+            catch (JsonException jecx)
+            {
+                OnError(new LemonMarketsJsonConvertEventArgs()
+                {
+                    Exception = jecx,
+                    OriginalString = result.Result,
+                    TargetType = nameof(IsOnline),
+                    Message = jecx.Message,
+                });
+                return returnValue;
+            }
+            catch (Exception exc)
+            {
+                OnError(new UnhandledExceptionEventArgs(exc, false));
+                return returnValue;
+            }
+        }
+        #endregion
+
+        #endregion
+
+        #region Orders
+        public async Task<LemonMarketsOrdersRespone> GetOrdersAsync(string isin = "", string side = "", string status ="", string fromIsoDateString = "", string toIsoDateString = "")
+        {
+            LemonMarketsOrdersRespone returnValue = new();
+            LemonMarketsApiRequestRespone result = new();
+            try
+            {
+                Dictionary<string, string> parameters = new();
+
+                if (!string.IsNullOrEmpty(isin)) parameters.Add("isin", isin);
+                if (!string.IsNullOrEmpty(side)) parameters.Add("side", side);
+                if (!string.IsNullOrEmpty(status)) parameters.Add("status", status);
+                if (!string.IsNullOrEmpty(toIsoDateString)) parameters.Add("to", toIsoDateString);
+                if (!string.IsNullOrEmpty(fromIsoDateString)) parameters.Add("from", fromIsoDateString);
+
+                result = await SendRestApiRequestAsync(
+                   function: LemonMarketsEndpoints.orders,
+                   additionalParameters: parameters
+                   )
+                    .ConfigureAwait(false);
+
+                LemonMarketsOrdersRespone info = JsonConvert.DeserializeObject<LemonMarketsOrdersRespone>(result.Result);
+                return info;
+            }
+            catch (JsonException jecx)
+            {
+                OnError(new LemonMarketsJsonConvertEventArgs()
+                {
+                    Exception = jecx,
+                    OriginalString = result.Result,
+                    TargetType = nameof(IsOnline),
+                    Message = jecx.Message,
+                });
+                return returnValue;
+            }
+            catch (Exception exc)
+            {
+                OnError(new UnhandledExceptionEventArgs(exc, false));
+                return returnValue;
+            }
+        }
+        public async Task<LemonMarketsOrdersRespone> GetOrdersAsync(DateTime fromDate, DateTime toDate, string isin = "", string side = "", string status = "")
+        {
+            return await GetOrdersAsync(isin, side, status, fromDate.ToString("yyyy-MM-ddTHH:mm:ss"), toDate.ToString("yyyy-MM-ddTHH:mm:ss"))
+                .ConfigureAwait(false);
+        }
+
+        public async Task<LemonMarketsQuotesRespone> PlaceOrderAsync(string isin, string side, int quantity, string venue = "XMUN", string expriesAt = "1D")
+        {
+            LemonMarketsQuotesRespone returnValue = new();
+            LemonMarketsApiRequestRespone result = new();
+            try
+            {
+                object jsonData =
+                new
+                {
+                    isin,
+                    side,
+                    quantity,
+                    venue,
+                    expriesAt,
+                };
+
+                result = await SendRestApiRequestAsync(
+                   function: LemonMarketsEndpoints.orders,
+                   jsonData: jsonData,
+                   method: Method.Post
+                   )
+                    .ConfigureAwait(false);
+
+                LemonMarketsQuotesRespone info = JsonConvert.DeserializeObject<LemonMarketsQuotesRespone>(result.Result);
+                return info;
+            }
+            catch (JsonException jecx)
+            {
+                OnError(new LemonMarketsJsonConvertEventArgs()
+                {
+                    Exception = jecx,
+                    OriginalString = result.Result,
+                    TargetType = nameof(IsOnline),
+                    Message = jecx.Message,
+                });
+                return returnValue;
+            }
+            catch (Exception exc)
+            {
+                OnError(new UnhandledExceptionEventArgs(exc, false));
+                return returnValue;
+            }
+        }
+        public async Task<LemonMarketsRespone> ActivateOrderAsync(string orderId)
+        {
+            LemonMarketsRespone returnValue = new();
+            LemonMarketsApiRequestRespone result = new();
+            try
+            {
+                result = await SendRestApiRequestAsync(
+                   function: LemonMarketsEndpoints.orders,
+                   command: $"{orderId}/activate",
+                   method: Method.Post
+                   )
+                    .ConfigureAwait(false);
+
+                LemonMarketsRespone info = JsonConvert.DeserializeObject<LemonMarketsRespone>(result.Result);
+                return info;
+            }
+            catch (JsonException jecx)
+            {
+                OnError(new LemonMarketsJsonConvertEventArgs()
+                {
+                    Exception = jecx,
+                    OriginalString = result.Result,
+                    TargetType = nameof(IsOnline),
+                    Message = jecx.Message,
+                });
+                return returnValue;
+            }
+            catch (Exception exc)
+            {
+                OnError(new UnhandledExceptionEventArgs(exc, false));
+                return returnValue;
+            }
+        }
+        public async Task<LemonMarketsRespone> CancelOrderAsync(string orderId)
+        {
+            LemonMarketsRespone returnValue = new();
+            LemonMarketsApiRequestRespone result = new();
+            try
+            {
+                result = await SendRestApiRequestAsync(
+                   function: LemonMarketsEndpoints.orders,
+                   command: $"{orderId}",
+                   method: Method.Delete
+                   )
+                    .ConfigureAwait(false);
+
+                LemonMarketsRespone info = JsonConvert.DeserializeObject<LemonMarketsRespone>(result.Result);
+                return info;
+            }
+            catch (JsonException jecx)
+            {
+                OnError(new LemonMarketsJsonConvertEventArgs()
+                {
+                    Exception = jecx,
+                    OriginalString = result.Result,
+                    TargetType = nameof(IsOnline),
+                    Message = jecx.Message,
+                });
+                return returnValue;
+            }
+            catch (Exception exc)
+            {
+                OnError(new UnhandledExceptionEventArgs(exc, false));
+                return returnValue;
+            }
+        }
+        #endregion
+
+        #region Positions
+
+        public async Task<LemonMarketsPositionsRespone> GetPositionsAsync(string isin = "", int limit = 10, int page = 1)
+        {
+            LemonMarketsPositionsRespone returnValue = new();
+            LemonMarketsApiRequestRespone result = new();
+            try
+            {
+                Dictionary<string, string> parameters = new();
+
+                if (!string.IsNullOrEmpty(isin)) parameters.Add("isin", isin);
+                parameters.Add("limit", limit.ToString());
+                parameters.Add("page", page.ToString());
+
+                result = await SendRestApiRequestAsync(
+                   function: LemonMarketsEndpoints.positions,
+                   command: "statements",
+                   additionalParameters: parameters
+                   )
+                    .ConfigureAwait(false);
+
+                LemonMarketsPositionsRespone info = JsonConvert.DeserializeObject<LemonMarketsPositionsRespone>(result.Result);
+                return info;
+            }
+            catch (JsonException jecx)
+            {
+                OnError(new LemonMarketsJsonConvertEventArgs()
+                {
+                    Exception = jecx,
+                    OriginalString = result.Result,
+                    TargetType = nameof(IsOnline),
+                    Message = jecx.Message,
+                });
+                return returnValue;
+            }
+            catch (Exception exc)
+            {
+                OnError(new UnhandledExceptionEventArgs(exc, false));
+                return returnValue;
+            }
+        }
+
+        public async Task<LemonMarketsStatementsRespone> GetStatementsAsync(string type = "", int limit = 10, int page = 1)
+        {
+            LemonMarketsStatementsRespone returnValue = new();
+            LemonMarketsApiRequestRespone result = new();
+            try
+            {
+                Dictionary<string, string> parameters = new();
+
+                if (!string.IsNullOrEmpty(type)) parameters.Add("type", type);
+                parameters.Add("limit", limit.ToString());
+                parameters.Add("page", page.ToString());
+
+                result = await SendRestApiRequestAsync(
+                   function: LemonMarketsEndpoints.positions,
+                   command: "statements",
+                   additionalParameters: parameters
+                   )
+                    .ConfigureAwait(false);
+
+                LemonMarketsStatementsRespone info = JsonConvert.DeserializeObject<LemonMarketsStatementsRespone>(result.Result);
+                return info;
+            }
+            catch (JsonException jecx)
+            {
+                OnError(new LemonMarketsJsonConvertEventArgs()
+                {
+                    Exception = jecx,
+                    OriginalString = result.Result,
+                    TargetType = nameof(IsOnline),
+                    Message = jecx.Message,
+                });
+                return returnValue;
+            }
+            catch (Exception exc)
+            {
+                OnError(new UnhandledExceptionEventArgs(exc, false));
+                return returnValue;
+            }
+        }
+        
+        public async Task<LemonMarketsPerformanceRespone> GetPerformanceAsync(string isin = "", string sorting = "asc", string fromIsoDateString = "", string toIsoDateString = "", int limit = 10, int page = 1)
+        {
+            LemonMarketsPerformanceRespone returnValue = new();
+            LemonMarketsApiRequestRespone result = new();
+            try
+            {
+                Dictionary<string, string> parameters = new();
+
+                if (!string.IsNullOrEmpty(isin)) parameters.Add("isin", isin);
+                if (!string.IsNullOrEmpty(sorting)) parameters.Add("sorting", sorting);
+                if (!string.IsNullOrEmpty(toIsoDateString)) parameters.Add("to", toIsoDateString);
+                if (!string.IsNullOrEmpty(fromIsoDateString)) parameters.Add("from", fromIsoDateString);
+                parameters.Add("limit", limit.ToString());
+                parameters.Add("page", page.ToString());
+
+                result = await SendRestApiRequestAsync(
+                   function: LemonMarketsEndpoints.positions,
+                   command: "performance",
+                   additionalParameters: parameters
+                   )
+                    .ConfigureAwait(false);
+
+                LemonMarketsPerformanceRespone info = JsonConvert.DeserializeObject<LemonMarketsPerformanceRespone>(result.Result);
+                return info;
+            }
+            catch (JsonException jecx)
+            {
+                OnError(new LemonMarketsJsonConvertEventArgs()
+                {
+                    Exception = jecx,
+                    OriginalString = result.Result,
+                    TargetType = nameof(IsOnline),
+                    Message = jecx.Message,
+                });
+                return returnValue;
+            }
+            catch (Exception exc)
+            {
+                OnError(new UnhandledExceptionEventArgs(exc, false));
+                return returnValue;
+            }
+        }
+        #endregion
 
         #endregion
 
@@ -707,7 +1284,7 @@ namespace AndreasReitberger.API
             return await GetInstrumentsAsync(isin: string.Join(",", isins)).ConfigureAwait(false);
         }
 
-        public async Task<LemonMarketsVenuesRespone> GetVenuesAsync(string mic = "", int limit = 100, int page = 0)
+        public async Task<LemonMarketsVenuesRespone> GetVenuesAsync(string mic = "", int limit = 100, int page = 1)
         {
             LemonMarketsVenuesRespone returnValue = new();
             LemonMarketsApiRequestRespone result = new();

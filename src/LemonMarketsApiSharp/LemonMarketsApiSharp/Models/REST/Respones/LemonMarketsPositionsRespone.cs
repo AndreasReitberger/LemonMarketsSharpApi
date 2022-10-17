@@ -4,14 +4,20 @@ using System.Collections.Generic;
 
 namespace AndreasReitberger.API.Models.REST.Respones
 {
-    public partial class LemonMarketsVenuesRespone
+    public partial class LemonMarketsPositionsRespone
     {
         #region Properties
         [JsonProperty("time")]
         public DateTimeOffset Time { get; set; }
 
+        [JsonProperty("status")]
+        public string Status { get; set; }
+
+        [JsonProperty("mode")]
+        public string Mode { get; set; }
+
         [JsonProperty("results")]
-        public List<LemonMarketsVenueResult> Results { get; set; } = new();
+        public List<LemonMarketsPositionsResult> Results { get; set; }
 
         [JsonProperty("previous")]
         public Uri Previous { get; set; }
@@ -27,7 +33,6 @@ namespace AndreasReitberger.API.Models.REST.Respones
 
         [JsonProperty("pages")]
         public long Pages { get; set; }
-
         #endregion
 
         #region Overrides
