@@ -10,8 +10,7 @@ namespace LemonMarketsStocksApiSharp.Test
 {
     public class Tests
     {
-        const string api = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdWQiOiJsZW1vbi5tYXJrZXRzIiwiaXNzIjoibGVtb24ubWFya2V0cyIsInN1YiI6InVzcl9xeU1sTmxsUFBKUk5kWXd0Z0JaaHpmVE1IMXliMEd5NGhjIiwiZXhwIjoxNjk1OTgzMzU1LCJpYXQiOjE2NjQ0NDczNTUsImp0aSI6ImFwa19xeU1sTmxsVlZwOFc5N0R5d1d3ZE5xMjAxQ2M3SkdXRnlYIiwibW9kZSI6InBhcGVyIn0.scvjMuZj6I8suhiAWXt6RMKEAK5r1iWzpzCe0Ql6Fns";   
-        //const string api = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdWQiOiJsZW1vbi5tYXJrZXRzIiwiaXNzIjoibGVtb24ubWFya2V0cyIsInN1YiI6InVzcl9xeU1sTmxsUFBKUk5kWXd0Z0JaaHpmVE1IMXliMEd5NGhjIiwiZXhwIjoxNjY5NjMzMzgzLCJpYXQiOjE2NjQ0NDkzODMsImp0aSI6ImFwa19xeU1sUEZGR0cwZHNLWnhuOFdWNDBmRkZTRjZjbWdSSjNDIiwibW9kZSI6Im1hcmtldF9kYXRhIn0.atZz99IVoCKNbQpTuU34bv-fqIDkmWdwz7Lwkn_9Msc";
+        const string api = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdWQiOiJsZW1vbi5tYXJrZXRzIiwiaXNzIjoibGVtb24ubWFya2V0cyIsInN1YiI6InVzcl9xeU1sTmxsUFBKUk5kWXd0Z0JaaHpmVE1IMXliMEd5NGhjIiwiZXhwIjoxNjY5NjMzMzgzLCJpYXQiOjE2NjQ0NDkzODMsImp0aSI6ImFwa19xeU1sUEZGR0cwZHNLWnhuOFdWNDBmRkZTRjZjbWdSSjNDIiwibW9kZSI6Im1hcmtldF9kYXRhIn0.atZz99IVoCKNbQpTuU34bv-fqIDkmWdwz7Lwkn_9Msc";
         [SetUp]
         public void Setup()
         {
