@@ -29,6 +29,12 @@ namespace AndreasReitberger.API
                 return this;
             }
            
+            public LemonMarketsConnectionBuilder WithLiveStreaming()
+            {
+                _client.Address = LemonMarketsAPIs.LiveStreamingAPI;
+                return this;
+            }
+           
             public LemonMarketsConnectionBuilder WithMarketData()
             {
                 _client.Address = LemonMarketsAPIs.MarketDataAPI;

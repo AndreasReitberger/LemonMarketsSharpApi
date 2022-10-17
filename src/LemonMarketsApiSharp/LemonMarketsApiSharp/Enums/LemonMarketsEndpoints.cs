@@ -8,5 +8,13 @@
         quotes,
         trades,
         ohlc,
+
+        // Trading
+        account,
+        orders,
+        positions,
+
+        // Live
+        auth,
     }
 }

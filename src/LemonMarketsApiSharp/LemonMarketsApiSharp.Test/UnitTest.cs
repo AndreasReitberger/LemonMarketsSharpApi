@@ -113,7 +113,7 @@ namespace LemonMarketsStocksApiSharp.Test
                 await client.CheckOnlineAsync();
                 Assert.IsTrue(client.IsOnline);
 
-                var ohlc = await client.GetOHLCAsync(LemonMarketsSymbols.BASF, LemonMarketsIntervals.PerDay);
+                var ohlc = await client.GetOHLCAsync(LemonMarketsSymbols.BASF, LemonMarketsIntervals.PerDay, -1, -1);
                 Assert.IsTrue(ohlc?.Results?.Count > 0);
             }
             catch(Exception exc)
@@ -136,6 +136,74 @@ namespace LemonMarketsStocksApiSharp.Test
 
                 var trades = await client.GetTradesAsync(LemonMarketsSymbols.BASF);
                 Assert.IsTrue(trades?.Results?.Count > 0);
+            }
+            catch(Exception exc)
+            {
+                Assert.Fail(exc.Message);
+            }
+        }
+
+        [Test]
+        public async Task AccountTest()
+        {
+            try
+            {
+                LemonMarketsClient client = new LemonMarketsClient.LemonMarketsConnectionBuilder()
+                    .WithPaperTrading()
+                    .WithApiKey(apiKey: api)
+                    .Build();
+                Assert.IsNotNull(client);
+                await client.CheckOnlineAsync();
+                Assert.IsTrue(client.IsOnline);
+
+                var accountInfo = await client.GetAccountInformationAsync();
+                Assert.IsNotNull(accountInfo?.Results);
+            }
+            catch(Exception exc)
+            {
+                Assert.Fail(exc.Message);
+            }
+        }
+
+        [Test]
+        public async Task WithdrawalsTest()
+        {
+            try
+            {
+                LemonMarketsClient client = new LemonMarketsClient.LemonMarketsConnectionBuilder()
+                    .WithPaperTrading()
+                    .WithApiKey(apiKey: api)
+                    .Build();
+                Assert.IsNotNull(client);
+                await client.CheckOnlineAsync();
+                Assert.IsTrue(client.IsOnline);
+
+                var withdrawal = await client.WithdrawalMoneyAsync(amountOfMoney: 100, 1234);
+                Assert.IsNotNull(withdrawal);
+                Assert.IsTrue(withdrawal.Status == "ok");
+            }
+            catch(Exception exc)
+            {
+                Assert.Fail(exc.Message);
+            }
+        }
+
+        [Test]
+        public async Task GetBankStatementsTest()
+        {
+            try
+            {
+                LemonMarketsClient client = new LemonMarketsClient.LemonMarketsConnectionBuilder()
+                    .WithPaperTrading()
+                    .WithApiKey(apiKey: api)
+                    .Build();
+                Assert.IsNotNull(client);
+                await client.CheckOnlineAsync();
+                Assert.IsTrue(client.IsOnline);
+
+                var statements = await client.GetBankStatementsAsync(type: LemonMarketsBankStatementTypes.Dividend);
+                Assert.IsNotNull(statements);
+                Assert.IsTrue(statements.Status == "ok");
             }
             catch(Exception exc)
             {
