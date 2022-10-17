@@ -14,10 +14,10 @@ namespace AndreasReitberger.API.Models.REST.Respones
         public List<LemonMarketsQuotesResult> Results { get; set; }
 
         [JsonProperty("previous")]
-        public object Previous { get; set; }
+        public Uri Previous { get; set; }
 
         [JsonProperty("next")]
-        public object Next { get; set; }
+        public Uri Next { get; set; }
 
         [JsonProperty("total")]
         public long Total { get; set; }
