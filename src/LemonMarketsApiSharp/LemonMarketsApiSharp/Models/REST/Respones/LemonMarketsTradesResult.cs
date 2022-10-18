@@ -15,7 +15,7 @@ namespace AndreasReitberger.API.Models.REST.Respones
 
         [JsonProperty("p")]
         /// This is the Price the trade happened at
-        public double Price { get; set; }  
+        public double Price { get; set; }
 
         [JsonProperty("v")]
         /// This is the Volume for the trade (quantity)

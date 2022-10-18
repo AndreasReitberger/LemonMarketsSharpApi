@@ -2,7 +2,7 @@
 
 namespace AndreasReitberger.API.Models.REST.Events
 {
-    public class LemonMarketsRestEventArgs: EventArgs
+    public class LemonMarketsRestEventArgs : EventArgs
     {
         #region Properties
         public string Message { get; set; }

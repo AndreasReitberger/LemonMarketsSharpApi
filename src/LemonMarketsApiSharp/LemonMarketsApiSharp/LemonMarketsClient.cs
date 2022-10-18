@@ -493,7 +493,7 @@ namespace AndreasReitberger.API
 
                 if (additionalParameters?.Count > 0)
                 {
-                    foreach(KeyValuePair<string, string> paramter in additionalParameters)
+                    foreach (KeyValuePair<string, string> paramter in additionalParameters)
                     {
                         request.AddParameter(paramter.Key, paramter.Value, ParameterType.QueryString);
                     }
@@ -508,7 +508,7 @@ namespace AndreasReitberger.API
                 {
                     jsonDataString = JsonConvert.SerializeObject(jsonObject);
                 }
-                if(!string.IsNullOrEmpty(jsonDataString))
+                if (!string.IsNullOrEmpty(jsonDataString))
                 {
                     //_ = request.AddParameter("data", jsonDataString, ParameterType.QueryString);
                     _ = request.AddJsonBody(jsonDataString);
@@ -793,7 +793,7 @@ namespace AndreasReitberger.API
                 {
                     amount,
                     pin,
-                } : 
+                } :
                 new
                 {
                     amount,
@@ -806,7 +806,7 @@ namespace AndreasReitberger.API
                    function: LemonMarketsEndpoints.account,
                    command: "withdrawals",
                    jsonData: jsonData,
-                   method: Method.Post                   
+                   method: Method.Post
                    )
                     .ConfigureAwait(false);
 
@@ -985,7 +985,7 @@ namespace AndreasReitberger.API
         #endregion
 
         #region Orders
-        public async Task<LemonMarketsOrdersRespone> GetOrdersAsync(string isin = "", string side = "", string status ="", string fromIsoDateString = "", string toIsoDateString = "")
+        public async Task<LemonMarketsOrdersRespone> GetOrdersAsync(string isin = "", string side = "", string status = "", string fromIsoDateString = "", string toIsoDateString = "")
         {
             LemonMarketsOrdersRespone returnValue = new();
             LemonMarketsApiRequestRespone result = new();
@@ -1259,7 +1259,7 @@ namespace AndreasReitberger.API
                 return returnValue;
             }
         }
-        
+
         public async Task<LemonMarketsPerformanceRespone> GetPerformanceAsync(string isin = "", string sorting = "asc", string fromIsoDateString = "", string toIsoDateString = "", int limit = 10, int page = 1)
         {
             LemonMarketsPerformanceRespone returnValue = new();
@@ -1381,8 +1381,8 @@ namespace AndreasReitberger.API
                 Dictionary<string, string> parameters = new();
 
                 if (!string.IsNullOrEmpty(mic)) parameters.Add("mic", mic);
-                if (limit != 100)  parameters.Add("limit", limit.ToString());
-                if (page > 0)  parameters.Add("page", page.ToString());
+                if (limit != 100) parameters.Add("limit", limit.ToString());
+                if (page > 0) parameters.Add("page", page.ToString());
 
                 result = await SendRestApiRequestAsync(
                    function: LemonMarketsEndpoints.venues,
@@ -1481,7 +1481,7 @@ namespace AndreasReitberger.API
                 };
                 if (!string.IsNullOrEmpty(toIsoDateString)) parameters.Add("to", toIsoDateString);
                 if (!string.IsNullOrEmpty(fromIsoDateString)) parameters.Add("from", fromIsoDateString);
-                
+
                 string command = interval switch
                 {
                     LemonMarketsIntervals.PerMinute => "m1",
@@ -1526,14 +1526,14 @@ namespace AndreasReitberger.API
                 epoch)
                 .ConfigureAwait(false);
         }
-        
+
         public async Task<LemonMarketsOHLCRespone> GetOHLCAsync(List<string> isins, LemonMarketsIntervals interval, int fromIsoDate = -1, int toIsoDate = -1, bool decimals = true, bool epoch = false)
         {
-            return await GetOHLCAsync(isin: string.Join(",", isins),interval: interval, fromIsoDate, toIsoDate, decimals, epoch).ConfigureAwait(false);
+            return await GetOHLCAsync(isin: string.Join(",", isins), interval: interval, fromIsoDate, toIsoDate, decimals, epoch).ConfigureAwait(false);
         }
         public async Task<LemonMarketsOHLCRespone> GetOHLCAsync(List<string> isins, LemonMarketsIntervals interval, string fromIsoDateString = "", string toIsoDateString = "", bool decimals = true, bool epoch = false)
         {
-            return await GetOHLCAsync(isin: string.Join(",", isins),interval: interval, fromIsoDateString, toIsoDateString, decimals, epoch).ConfigureAwait(false);
+            return await GetOHLCAsync(isin: string.Join(",", isins), interval: interval, fromIsoDateString, toIsoDateString, decimals, epoch).ConfigureAwait(false);
         }
         public async Task<LemonMarketsOHLCRespone> GetOHLCAsync(List<string> isins, LemonMarketsIntervals interval, DateTime fromDate, DateTime toDate, bool decimals = true, bool epoch = false)
         {
@@ -1602,7 +1602,7 @@ namespace AndreasReitberger.API
             LemonMarketsApiRequestRespone result = new();
             try
             {
-                if(Api != LemonMarketsAPIEndpoints.LiveStreaming)
+                if (Api != LemonMarketsAPIEndpoints.LiveStreaming)
                 {
                     throw new NotSupportedException(
                         $"This function is only supported for the live stream endpoint '{LemonMarketsAPIEndpoints.LiveStreaming}'! You are currently connected to '{Api} => {Address}'"
@@ -1656,7 +1656,7 @@ namespace AndreasReitberger.API
                 return null;
             }
         }
-        
+
         public AblyRealtime SetupMessagingChannel(AblyRealtime realtime, LemonMarketsAuthRespone auth, Action<Message> action)
         {
             return SetupMessagingChannel(realtime, auth.UserId, action);
@@ -1679,7 +1679,7 @@ namespace AndreasReitberger.API
                 return null;
             }
         }
-       
+
         public void SetupMessagingChannel(ref AblyRealtime realtime, LemonMarketsAuthRespone auth, Action<Message> action)
         {
             SetupMessagingChannel(ref realtime, auth.UserId, action);
@@ -1725,7 +1725,7 @@ namespace AndreasReitberger.API
                 return null;
             }
         }
-        
+
         public async Task<AblyRealtime> SubscribeMessagesAsync(AblyRealtime realtime, LemonMarketsAuthRespone auth, Action<Message> action, List<string> isins)
         {
             return await SubscribeMessagesAsync(realtime, auth.UserId, action, isins).ConfigureAwait(false);
@@ -1751,7 +1751,7 @@ namespace AndreasReitberger.API
                 return null;
             }
         }
-        
+
         public void SubscribeMessages(ref AblyRealtime realtime, LemonMarketsAuthRespone auth, Action<Message> action, Action<bool, ErrorInfo> error, List<string> isins)
         {
             SubscribeMessages(ref realtime, auth.UserId, action, error, isins);

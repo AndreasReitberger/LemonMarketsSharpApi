@@ -46,7 +46,7 @@ namespace LemonMarketsStocksApiSharp.Test
                 await client.CheckOnlineAsync();
                 Assert.IsTrue(client.IsOnline);
             }
-            catch(Exception exc)
+            catch (Exception exc)
             {
                 Assert.Fail(exc.Message);
             }
@@ -81,7 +81,7 @@ namespace LemonMarketsStocksApiSharp.Test
                 // Avoid api cooldowns for automated tests
                 await CooldownAsync(50000);
             }
-            catch(Exception exc)
+            catch (Exception exc)
             {
                 Assert.Fail(exc.Message);
             }
@@ -113,7 +113,7 @@ namespace LemonMarketsStocksApiSharp.Test
                 // Avoid api cooldowns for automated tests
                 await CooldownAsync(50000);
             }
-            catch(Exception exc)
+            catch (Exception exc)
             {
                 Assert.Fail(exc.Message);
             }
@@ -144,7 +144,7 @@ namespace LemonMarketsStocksApiSharp.Test
                 // Avoid api cooldowns for automated tests
                 await CooldownAsync(50000);
             }
-            catch(Exception exc)
+            catch (Exception exc)
             {
                 Assert.Fail(exc.Message);
             }
@@ -175,7 +175,7 @@ namespace LemonMarketsStocksApiSharp.Test
                 // Avoid api cooldowns for automated tests
                 await CooldownAsync(50000);
             }
-            catch(Exception exc)
+            catch (Exception exc)
             {
                 Assert.Fail(exc.Message);
             }
@@ -206,7 +206,7 @@ namespace LemonMarketsStocksApiSharp.Test
                 // Avoid api cooldowns for automated tests
                 await CooldownAsync(50000);
             }
-            catch(Exception exc)
+            catch (Exception exc)
             {
                 Assert.Fail(exc.Message);
             }
@@ -237,7 +237,7 @@ namespace LemonMarketsStocksApiSharp.Test
                 // Avoid api cooldowns for automated tests
                 await CooldownAsync(50000);
             }
-            catch(Exception exc)
+            catch (Exception exc)
             {
                 Assert.Fail(exc.Message);
             }
@@ -269,7 +269,7 @@ namespace LemonMarketsStocksApiSharp.Test
                 // Avoid api cooldowns for automated tests
                 await CooldownAsync(50000);
             }
-            catch(Exception exc)
+            catch (Exception exc)
             {
                 Assert.Fail(exc.Message);
             }
@@ -301,7 +301,7 @@ namespace LemonMarketsStocksApiSharp.Test
                 // Avoid api cooldowns for automated tests
                 await CooldownAsync(50000);
             }
-            catch(Exception exc)
+            catch (Exception exc)
             {
                 Assert.Fail(exc.Message);
             }
