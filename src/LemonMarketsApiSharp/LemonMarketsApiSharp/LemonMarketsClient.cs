@@ -4,6 +4,8 @@ using AndreasReitberger.API.Models.REST.Events;
 using AndreasReitberger.API.Models.REST.Respones;
 using AndreasReitberger.API.Structs;
 using AndreasReitberger.Core.Utilities;
+using IO.Ably;
+using IO.Ably.Realtime;
 using Newtonsoft.Json;
 using RestSharp;
 using System;
@@ -85,7 +87,7 @@ namespace AndreasReitberger.API
         }
 
         [JsonProperty(nameof(Address))]
-        string address = "https://data.lemon.markets/v1/";
+        string address = "";
         [JsonIgnore]
         public string Address
         {
@@ -404,7 +406,8 @@ namespace AndreasReitberger.API
                             .ConfigureAwait(false),
                         LemonMarketsAPIEndpoints.LiveStreaming =>
                             await SendOnlineCheckRestApiRequestAsync(
-                                function: LemonMarketsEndpoints.account,
+                                function: LemonMarketsEndpoints.auth,
+                                method: Method.Post,
                                 additionalParameters: null,
                                 cts: cts)
                              .ConfigureAwait(false),
@@ -738,6 +741,12 @@ namespace AndreasReitberger.API
             LemonMarketsApiRequestRespone result = new();
             try
             {
+                if (Api is not LemonMarketsAPIEndpoints.LiveTrading && Api is not LemonMarketsAPIEndpoints.PaperTrading)
+                {
+                    throw new NotSupportedException(
+                        $"This function is only supported for the trading endpoints '{LemonMarketsAPIEndpoints.LiveTrading}, {LemonMarketsAPIEndpoints.PaperTrading}'! You are currently connected to '{Api} => {Address}'"
+                        );
+                }
                 result = await SendRestApiRequestAsync(
                    function: LemonMarketsEndpoints.account,
                    additionalParameters: null
@@ -774,6 +783,12 @@ namespace AndreasReitberger.API
             LemonMarketsApiRequestRespone result = new();
             try
             {
+                if (Api is not LemonMarketsAPIEndpoints.LiveTrading && Api is not LemonMarketsAPIEndpoints.PaperTrading)
+                {
+                    throw new NotSupportedException(
+                        $"This function is only supported for the trading endpoints '{LemonMarketsAPIEndpoints.LiveTrading}, {LemonMarketsAPIEndpoints.PaperTrading}'! You are currently connected to '{Api} => {Address}'"
+                        );
+                }
                 object jsonData = string.IsNullOrEmpty(idempotency) ? new
                 {
                     amount,
@@ -832,6 +847,12 @@ namespace AndreasReitberger.API
             LemonMarketsApiRequestRespone result = new();
             try
             {
+                if (Api is not LemonMarketsAPIEndpoints.LiveTrading && Api is not LemonMarketsAPIEndpoints.PaperTrading)
+                {
+                    throw new NotSupportedException(
+                        $"This function is only supported for the trading endpoints '{LemonMarketsAPIEndpoints.LiveTrading}, {LemonMarketsAPIEndpoints.PaperTrading}'! You are currently connected to '{Api} => {Address}'"
+                        );
+                }
                 Dictionary<string, string> parameters = new();
 
                 if (!string.IsNullOrEmpty(type)) parameters.Add("type", type);
@@ -886,7 +907,12 @@ namespace AndreasReitberger.API
             LemonMarketsApiRequestRespone result = new();
             try
             {
-
+                if (Api is not LemonMarketsAPIEndpoints.LiveTrading && Api is not LemonMarketsAPIEndpoints.PaperTrading)
+                {
+                    throw new NotSupportedException(
+                        $"This function is only supported for the trading endpoints '{LemonMarketsAPIEndpoints.LiveTrading}, {LemonMarketsAPIEndpoints.PaperTrading}'! You are currently connected to '{Api} => {Address}'"
+                        );
+                }
                 result = await SendRestApiRequestAsync(
                    function: LemonMarketsEndpoints.account,
                    command: "documents",
@@ -921,7 +947,12 @@ namespace AndreasReitberger.API
             LemonMarketsApiRequestRespone result = new();
             try
             {
-
+                if (Api is not LemonMarketsAPIEndpoints.LiveTrading && Api is not LemonMarketsAPIEndpoints.PaperTrading)
+                {
+                    throw new NotSupportedException(
+                        $"This function is only supported for the trading endpoints '{LemonMarketsAPIEndpoints.LiveTrading}, {LemonMarketsAPIEndpoints.PaperTrading}'! You are currently connected to '{Api} => {Address}'"
+                        );
+                }
                 result = await SendRestApiRequestAsync(
                    function: LemonMarketsEndpoints.account,
                    command: $"documents/{id}",
@@ -960,6 +991,12 @@ namespace AndreasReitberger.API
             LemonMarketsApiRequestRespone result = new();
             try
             {
+                if (Api is not LemonMarketsAPIEndpoints.LiveTrading && Api is not LemonMarketsAPIEndpoints.PaperTrading)
+                {
+                    throw new NotSupportedException(
+                        $"This function is only supported for the trading endpoints '{LemonMarketsAPIEndpoints.LiveTrading}, {LemonMarketsAPIEndpoints.PaperTrading}'! You are currently connected to '{Api} => {Address}'"
+                        );
+                }
                 Dictionary<string, string> parameters = new();
 
                 if (!string.IsNullOrEmpty(isin)) parameters.Add("isin", isin);
@@ -1006,6 +1043,12 @@ namespace AndreasReitberger.API
             LemonMarketsApiRequestRespone result = new();
             try
             {
+                if (Api is not LemonMarketsAPIEndpoints.LiveTrading && Api is not LemonMarketsAPIEndpoints.PaperTrading)
+                {
+                    throw new NotSupportedException(
+                        $"This function is only supported for the trading endpoints '{LemonMarketsAPIEndpoints.LiveTrading}, {LemonMarketsAPIEndpoints.PaperTrading}'! You are currently connected to '{Api} => {Address}'"
+                        );
+                }
                 object jsonData =
                 new
                 {
@@ -1049,6 +1092,12 @@ namespace AndreasReitberger.API
             LemonMarketsApiRequestRespone result = new();
             try
             {
+                if (Api is not LemonMarketsAPIEndpoints.LiveTrading && Api is not LemonMarketsAPIEndpoints.PaperTrading)
+                {
+                    throw new NotSupportedException(
+                        $"This function is only supported for the trading endpoints '{LemonMarketsAPIEndpoints.LiveTrading}, {LemonMarketsAPIEndpoints.PaperTrading}'! You are currently connected to '{Api} => {Address}'"
+                        );
+                }
                 result = await SendRestApiRequestAsync(
                    function: LemonMarketsEndpoints.orders,
                    command: $"{orderId}/activate",
@@ -1082,6 +1131,12 @@ namespace AndreasReitberger.API
             LemonMarketsApiRequestRespone result = new();
             try
             {
+                if (Api is not LemonMarketsAPIEndpoints.LiveTrading && Api is not LemonMarketsAPIEndpoints.PaperTrading)
+                {
+                    throw new NotSupportedException(
+                        $"This function is only supported for the trading endpoints '{LemonMarketsAPIEndpoints.LiveTrading}, {LemonMarketsAPIEndpoints.PaperTrading}'! You are currently connected to '{Api} => {Address}'"
+                        );
+                }
                 result = await SendRestApiRequestAsync(
                    function: LemonMarketsEndpoints.orders,
                    command: $"{orderId}",
@@ -1119,6 +1174,12 @@ namespace AndreasReitberger.API
             LemonMarketsApiRequestRespone result = new();
             try
             {
+                if (Api is not LemonMarketsAPIEndpoints.LiveTrading && Api is not LemonMarketsAPIEndpoints.PaperTrading)
+                {
+                    throw new NotSupportedException(
+                        $"This function is only supported for the trading endpoints '{LemonMarketsAPIEndpoints.LiveTrading}, {LemonMarketsAPIEndpoints.PaperTrading}'! You are currently connected to '{Api} => {Address}'"
+                        );
+                }
                 Dictionary<string, string> parameters = new();
 
                 if (!string.IsNullOrEmpty(isin)) parameters.Add("isin", isin);
@@ -1159,6 +1220,12 @@ namespace AndreasReitberger.API
             LemonMarketsApiRequestRespone result = new();
             try
             {
+                if (Api is not LemonMarketsAPIEndpoints.LiveTrading && Api is not LemonMarketsAPIEndpoints.PaperTrading)
+                {
+                    throw new NotSupportedException(
+                        $"This function is only supported for the trading endpoints '{LemonMarketsAPIEndpoints.LiveTrading}, {LemonMarketsAPIEndpoints.PaperTrading}'! You are currently connected to '{Api} => {Address}'"
+                        );
+                }
                 Dictionary<string, string> parameters = new();
 
                 if (!string.IsNullOrEmpty(type)) parameters.Add("type", type);
@@ -1199,6 +1266,12 @@ namespace AndreasReitberger.API
             LemonMarketsApiRequestRespone result = new();
             try
             {
+                if (Api is not LemonMarketsAPIEndpoints.LiveTrading && Api is not LemonMarketsAPIEndpoints.PaperTrading)
+                {
+                    throw new NotSupportedException(
+                        $"This function is only supported for the trading endpoints '{LemonMarketsAPIEndpoints.LiveTrading}, {LemonMarketsAPIEndpoints.PaperTrading}'! You are currently connected to '{Api} => {Address}'"
+                        );
+                }
                 Dictionary<string, string> parameters = new();
 
                 if (!string.IsNullOrEmpty(isin)) parameters.Add("isin", isin);
@@ -1246,6 +1319,13 @@ namespace AndreasReitberger.API
             LemonMarketsApiRequestRespone result = new();
             try
             {
+                if (Api != LemonMarketsAPIEndpoints.MarketData)
+                {
+                    throw new NotSupportedException(
+                        $"This function is only supported for the market data endpoint '{LemonMarketsAPIEndpoints.MarketData}'! You are currently connected to '{Api} => {Address}'"
+                        );
+                }
+
                 // Always seems to be a CSV
                 Dictionary<string, string> parameters = new();
 
@@ -1290,6 +1370,13 @@ namespace AndreasReitberger.API
             LemonMarketsApiRequestRespone result = new();
             try
             {
+                if (Api != LemonMarketsAPIEndpoints.MarketData)
+                {
+                    throw new NotSupportedException(
+                        $"This function is only supported for the market data endpoint '{LemonMarketsAPIEndpoints.MarketData}'! You are currently connected to '{Api} => {Address}'"
+                        );
+                }
+
                 // Always seems to be a CSV
                 Dictionary<string, string> parameters = new();
 
@@ -1330,6 +1417,12 @@ namespace AndreasReitberger.API
             LemonMarketsApiRequestRespone result = new();
             try
             {
+                if (Api != LemonMarketsAPIEndpoints.MarketData)
+                {
+                    throw new NotSupportedException(
+                        $"This function is only supported for the market data endpoint '{LemonMarketsAPIEndpoints.MarketData}'! You are currently connected to '{Api} => {Address}'"
+                        );
+                }
                 // Always seems to be a CSV
                 Dictionary<string, string> parameters = new()
                 {
@@ -1373,6 +1466,12 @@ namespace AndreasReitberger.API
             LemonMarketsApiRequestRespone result = new();
             try
             {
+                if (Api != LemonMarketsAPIEndpoints.MarketData)
+                {
+                    throw new NotSupportedException(
+                        $"This function is only supported for the market data endpoint '{LemonMarketsAPIEndpoints.MarketData}'! You are currently connected to '{Api} => {Address}'"
+                        );
+                }
                 // Always seems to be a CSV
                 Dictionary<string, string> parameters = new()
                 {
@@ -1451,6 +1550,12 @@ namespace AndreasReitberger.API
             LemonMarketsApiRequestRespone result = new();
             try
             {
+                if (Api != LemonMarketsAPIEndpoints.MarketData)
+                {
+                    throw new NotSupportedException(
+                        $"This function is only supported for the market data endpoint '{LemonMarketsAPIEndpoints.MarketData}'! You are currently connected to '{Api} => {Address}'"
+                        );
+                }
                 // Always seems to be a CSV
                 Dictionary<string, string> parameters = new()
                 {
@@ -1485,6 +1590,188 @@ namespace AndreasReitberger.API
             {
                 OnError(new UnhandledExceptionEventArgs(exc, false));
                 return returnValue;
+            }
+        }
+        #endregion
+
+        #region LiveStreaming
+
+        public async Task<LemonMarketsAuthRespone> LiveStreamAuthAsync()
+        {
+            LemonMarketsAuthRespone returnValue = new();
+            LemonMarketsApiRequestRespone result = new();
+            try
+            {
+                if(Api != LemonMarketsAPIEndpoints.LiveStreaming)
+                {
+                    throw new NotSupportedException(
+                        $"This function is only supported for the live stream endpoint '{LemonMarketsAPIEndpoints.LiveStreaming}'! You are currently connected to '{Api} => {Address}'"
+                        );
+                }
+                result = await SendRestApiRequestAsync(
+                   function: LemonMarketsEndpoints.auth,
+                   method: Method.Post
+                   )
+                    .ConfigureAwait(false);
+
+                LemonMarketsAuthRespone info = JsonConvert.DeserializeObject<LemonMarketsAuthRespone>(result.Result);
+                return info;
+            }
+            catch (JsonException jecx)
+            {
+                OnError(new LemonMarketsJsonConvertEventArgs()
+                {
+                    Exception = jecx,
+                    OriginalString = result.Result,
+                    TargetType = nameof(IsOnline),
+                    Message = jecx.Message,
+                });
+                return returnValue;
+            }
+            catch (Exception exc)
+            {
+                OnError(new UnhandledExceptionEventArgs(exc, false));
+                return returnValue;
+            }
+        }
+
+        public AblyRealtime SetupRealtimeLiveStreamConnection(LemonMarketsAuthRespone auth)
+        {
+            return SetupRealtimeLiveStreamConnection(auth?.Token);
+        }
+        public AblyRealtime SetupRealtimeLiveStreamConnection(string token, int remainPresentFor = 1000)
+        {
+            try
+            {
+                AblyRealtime realtime = new(new ClientOptions()
+                {
+                    Token = token,
+                    TransportParams = new() { { "remainPresentFor", remainPresentFor } },
+                });
+                return realtime;
+            }
+            catch (Exception exc)
+            {
+                OnError(new UnhandledExceptionEventArgs(exc, false));
+                return null;
+            }
+        }
+        
+        public AblyRealtime SetupMessagingChannel(AblyRealtime realtime, LemonMarketsAuthRespone auth, Action<Message> action)
+        {
+            return SetupMessagingChannel(realtime, auth.UserId, action);
+        }
+        public AblyRealtime SetupMessagingChannel(AblyRealtime realtime, string userId, Action<Message> action)
+        {
+            try
+            {
+                IRealtimeChannel channel = realtime?.Channels.Get(userId);
+                channel.Subscribe((msg) =>
+                {
+                    action?.Invoke(msg);
+                });
+
+                return realtime;
+            }
+            catch (Exception exc)
+            {
+                OnError(new UnhandledExceptionEventArgs(exc, false));
+                return null;
+            }
+        }
+       
+        public void SetupMessagingChannel(ref AblyRealtime realtime, LemonMarketsAuthRespone auth, Action<Message> action)
+        {
+            SetupMessagingChannel(ref realtime, auth.UserId, action);
+        }
+        public void SetupMessagingChannel(ref AblyRealtime realtime, string userId, Action<Message> action)
+        {
+            try
+            {
+                IRealtimeChannel channel = realtime?.Channels.Get(userId);
+                channel.Subscribe((msg) =>
+                {
+                    action?.Invoke(msg);
+                });
+            }
+            catch (Exception exc)
+            {
+                OnError(new UnhandledExceptionEventArgs(exc, false));
+            }
+        }
+
+        public AblyRealtime SubscribeMessages(AblyRealtime realtime, LemonMarketsAuthRespone auth, Action<Message> action, Action<bool, ErrorInfo> error, List<string> isins)
+        {
+            return SubscribeMessages(realtime, auth.UserId, action, error, isins);
+        }
+        public AblyRealtime SubscribeMessages(AblyRealtime realtime, string userId, Action<Message> action, Action<bool, ErrorInfo> error, List<string> isins)
+        {
+            try
+            {
+                IRealtimeChannel channel = realtime?.Channels.Get($"{userId}.subscriptions");
+                if (isins?.Count > 10) throw new IndexOutOfRangeException($"Maximal allowd isins in the list are 10.");
+
+                channel.Publish("isins", string.Join(",", isins), error);
+                channel.Subscribe((msg) =>
+                {
+                    action?.Invoke(msg);
+                });
+
+                return realtime;
+            }
+            catch (Exception exc)
+            {
+                OnError(new UnhandledExceptionEventArgs(exc, false));
+                return null;
+            }
+        }
+        
+        public async Task<AblyRealtime> SubscribeMessagesAsync(AblyRealtime realtime, LemonMarketsAuthRespone auth, Action<Message> action, List<string> isins)
+        {
+            return await SubscribeMessagesAsync(realtime, auth.UserId, action, isins).ConfigureAwait(false);
+        }
+        public async Task<AblyRealtime> SubscribeMessagesAsync(AblyRealtime realtime, string userId, Action<Message> action, List<string> isins)
+        {
+            try
+            {
+                IRealtimeChannel channel = realtime?.Channels.Get($"{userId}.subscriptions");
+                if (isins?.Count > 10) throw new IndexOutOfRangeException($"Maximal allowd isins in the list are 10.");
+
+                await channel.PublishAsync("isins", string.Join(",", isins));
+                channel.Subscribe((msg) =>
+                {
+                    action?.Invoke(msg);
+                });
+
+                return realtime;
+            }
+            catch (Exception exc)
+            {
+                OnError(new UnhandledExceptionEventArgs(exc, false));
+                return null;
+            }
+        }
+        
+        public void SubscribeMessages(ref AblyRealtime realtime, LemonMarketsAuthRespone auth, Action<Message> action, Action<bool, ErrorInfo> error, List<string> isins)
+        {
+            SubscribeMessages(ref realtime, auth.UserId, action, error, isins);
+        }
+        public void SubscribeMessages(ref AblyRealtime realtime, string userId, Action<Message> action, Action<bool, ErrorInfo> error, List<string> isins)
+        {
+            try
+            {
+                IRealtimeChannel channel = realtime?.Channels.Get($"{userId}.subscriptions");
+                if (isins?.Count > 10) throw new IndexOutOfRangeException($"Maximal allowd isins in the list are 10.");
+
+                channel.Publish("isins", string.Join(",", isins), error);
+                channel.Subscribe((msg) =>
+                {
+                    action?.Invoke(msg);
+                });
+            }
+            catch (Exception exc)
+            {
+                OnError(new UnhandledExceptionEventArgs(exc, false));
             }
         }
         #endregion
