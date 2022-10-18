@@ -28,10 +28,10 @@ namespace AndreasReitberger.API.Models.REST.Respones
         public long QuantityOpen { get; set; }
 
         [JsonProperty("opened_at")]
-        public DateTimeOffset OpenedAt { get; set; }
+        public DateTimeOffset? OpenedAt { get; set; }
 
         [JsonProperty("closed_at")]
-        public DateTimeOffset ClosedAt { get; set; }
+        public DateTimeOffset? ClosedAt { get; set; }
 
         [JsonProperty("fees")]
         public long Fees { get; set; }
