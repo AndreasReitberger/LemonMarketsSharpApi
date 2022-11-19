@@ -4,197 +4,197 @@
       "DAX": [
         {
           "Name": "Airbus",
-          "Symbol": "",
+          "Symbol": "AIR",
           "ISIN": "NL0000235190"
         },
         {
           "Name": "Alianz",
-          "Symbol": "",
+          "Symbol": "ALV",
           "ISIN": "DE0008404005"
         },
         {
           "Name": "BASF",
-          "Symbol": "",
+          "Symbol": "BAS",
           "ISIN": "DE000BASF111"
         },
         {
           "Name": "Bayer",
-          "Symbol": "",
+          "Symbol": "BAYN",
           "ISIN": "DE000BAY0017"
         },
         {
           "Name": "Beiersdorf",
-          "Symbol": "",
+          "Symbol": "BEI",
           "ISIN": "DE0005200000"
         },
         {
           "Name": "BMW",
-          "Symbol": "",
+          "Symbol": "BMW",
           "ISIN": "DE0005190003"
         },
         {
           "Name": "Brenntag",
-          "Symbol": "",
+          "Symbol": "BNR",
           "ISIN": "DE000A1DAHH0"
         },
         {
           "Name": "Continental",
-          "Symbol": "",
+          "Symbol": "CON",
           "ISIN": "DE0005439004"
         },
         {
           "Name": "Covestro",
-          "Symbol": "",
+          "Symbol": "1COV",
           "ISIN": "DE0006062144"
         },
         {
           "Name": "Daimler Truck",
-          "Symbol": "",
+          "Symbol": "DTG",
           "ISIN": "DE000DTR0CK8"
         },
         {
           "Name": "Deutsche Bank",
-          "Symbol": "",
+          "Symbol": "DBK",
           "ISIN": "DE0005140008"
         },
         {
-          "Name": "Deutsche B�rse",
-          "Symbol": "",
+          "Name": "Deutsche Boerse",
+          "Symbol": "DB1",
           "ISIN": "DE0005810055"
         },
         {
           "Name": "Deutsche Post",
-          "Symbol": "",
+          "Symbol": "DPW",
           "ISIN": "DE0005552004"
         },
         {
           "Name": "Deutsche Telekom",
-          "Symbol": "",
+          "Symbol": "DTE",
           "ISIN": "DE0005557508"
         },
         {
           "Name": "E.ON",
-          "Symbol": "",
+          "Symbol": "EOAN",
           "ISIN": "DE000ENAG999"
         },
         {
           "Name": "Fresenius",
-          "Symbol": "",
+          "Symbol": "FRE",
           "ISIN": "DE0005785604"
         },
         {
           "Name": "Fresenius Medical Care",
-          "Symbol": "",
+          "Symbol": "FME",
           "ISIN": "DE0005785802"
         },
         {
-          "Name": "Hannover R�ck",
-          "Symbol": "",
+          "Name": "Hannover Rueck",
+          "Symbol": "HNR1",
           "ISIN": "DE0008402215"
         },
         {
           "Name": "HeidelbergCement",
-          "Symbol": "",
+          "Symbol": "HEI",
           "ISIN": "DE0006047004"
         },
         {
           "Name": "HelloFresh",
-          "Symbol": "",
+          "Symbol": "HFG",
           "ISIN": "DE000A161408"
         },
         {
           "Name": "Henkel vz.",
-          "Symbol": "",
+          "Symbol": "HEN",
           "ISIN": "DE0006048432"
         },
         {
           "Name": "Infineon",
-          "Symbol": "",
+          "Symbol": "IFX",
           "ISIN": "DE0006231004"
         },
         {
           "Name": "Linde",
-          "Symbol": "",
+          "Symbol": "LIN",
           "ISIN": "IE00BZ12WP82"
         },
         {
           "Name": "Mercedes-Benz Group",
-          "Symbol": "",
+          "Symbol": "MBG",
           "ISIN": "DE0007100000"
         },
         {
           "Name": "Merck",
-          "Symbol": "",
+          "Symbol": "MRK",
           "ISIN": "DE0006599905"
         },
         {
           "Name": "MTU Aero Engines",
-          "Symbol": "",
+          "Symbol": "MTX",
           "ISIN": "DE000A0D9PT0"
         },
         {
-          "Name": "M�nchener R�ckversicherungs-Gesellschaft",
-          "Symbol": "",
+          "Name": "Muenchener Rueckversicherungs-Gesellschaft",
+          "Symbol": "MUV2",
           "ISIN": "DE0008430026"
         },
         {
           "Name": "Porsche",
-          "Symbol": "",
+          "Symbol": "PAH3",
           "ISIN": "DE000PAH0038"
         },
         {
           "Name": "Puma",
-          "Symbol": "",
+          "Symbol": "PUM",
           "ISIN": "DE0006969603"
         },
         {
           "Name": "QIAGEN",
-          "Symbol": "",
+          "Symbol": "QIA",
           "ISIN": "NL0012169213"
         },
         {
           "Name": "RWE",
-          "Symbol": "",
+          "Symbol": "RWE",
           "ISIN": "DE0007037129"
         },
         {
           "Name": "SAP",
-          "Symbol": "",
+          "Symbol": "SAP",
           "ISIN": "DE0007164600"
         },
         {
           "Name": "Sartorius vz.",
-          "Symbol": "",
+          "Symbol": "SRT",
           "ISIN": "DE0007165631"
         },
         {
           "Name": "Siemens",
-          "Symbol": "",
+          "Symbol": "SIE",
           "ISIN": "DE0007236101"
         },
         {
           "Name": "Siemens Healthineers",
-          "Symbol": "",
+          "Symbol": "SHL",
           "ISIN": "DE000SHL1006"
         },
         {
           "Name": "Symrise",
-          "Symbol": "",
+          "Symbol": "SY1",
           "ISIN": "DE000SYM9999"
         },
         {
           "Name": "Volkswagen (VW) vz.",
-          "Symbol": "",
+          "Symbol": "VOW3",
           "ISIN": "DE0007664039"
         },
         {
           "Name": "Vonovia",
-          "Symbol": "",
+          "Symbol": "VNA",
           "ISIN": "DE000A1ML7J1"
         },
         {
           "Name": "Zalando",
-          "Symbol": "",
+          "Symbol": "ZAL",
           "ISIN": "DE000ZAL1111"
         }
       ],
