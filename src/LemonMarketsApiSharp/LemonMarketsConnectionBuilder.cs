@@ -1,4 +1,5 @@
 ﻿using AndreasReitberger.API.Structs;
+using System;
 
 namespace AndreasReitberger.API
 {
@@ -17,6 +18,8 @@ namespace AndreasReitberger.API
                 return _client;
             }
 
+
+            [Obsolete("Use WithDevBrokerageApi instead")]
             public LemonMarketsConnectionBuilder WithPaperTrading()
             {
                 _client.Address = LemonMarketsAPIs.PaperTradingAPI;
@@ -35,9 +38,16 @@ namespace AndreasReitberger.API
                 return this;
             }
 
+            [Obsolete("Use WithDevBrokerageAPI instead")]
             public LemonMarketsConnectionBuilder WithMarketData()
             {
                 _client.Address = LemonMarketsAPIs.MarketDataAPI;
+                return this;
+            }
+
+            public LemonMarketsConnectionBuilder WithDevBrokerageApi()
+            {
+                _client.Address = LemonMarketsAPIs.DevBrokerageApi;
                 return this;
             }
 

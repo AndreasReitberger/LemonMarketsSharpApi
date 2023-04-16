@@ -716,6 +716,10 @@ namespace AndreasReitberger.API
                 {
                     Api = LemonMarketsAPIEndpoints.MarketData;
                 }
+                else if (address.StartsWith("https://dev-brokerage."))
+                {
+                    Api = LemonMarketsAPIEndpoints.DevBrokerage;
+                }
                 else
                 {
                     Api = LemonMarketsAPIEndpoints.Undefined;
@@ -1774,6 +1778,114 @@ namespace AndreasReitberger.API
                 OnError(new UnhandledExceptionEventArgs(exc, false));
             }
         }
+        #endregion
+
+        #region Dev Brokerage
+
+        /// <summary>
+        /// Lists or searches for instruments using the Dev Brokeratge API endpoint.
+        /// </summary>
+        /// <param name="isin">List of ISIN (comma separated). If empty, all will return</param>
+        /// <param name="search">A search string</param>
+        /// <param name="type">stock,etf,etn,etc</param>
+        /// <param name="isTradable">Whether the searched isins are tradeable</param>
+        /// <returns></returns>
+        public async Task<LemonMarketsInstrumentsRespone> ListInstrumentsAsync(string isin = "", string search = "", string type = "", int limit = 10, bool isTradable = true)
+        {
+            LemonMarketsInstrumentsRespone returnValue = new();
+            LemonMarketsApiRequestRespone result = new();
+            try
+            {
+                if (Api != LemonMarketsAPIEndpoints.DevBrokerage)
+                {
+                    throw new NotSupportedException(
+                        $"This function is only supported for the market data endpoint '{LemonMarketsAPIEndpoints.DevBrokerage}'! You are currently connected to '{Api} => {Address}'"
+                        );
+                }
+
+                // Always seems to be a CSV
+                Dictionary<string, string> parameters = new();
+
+                if (!string.IsNullOrEmpty(isin)) parameters.Add("isin", isin);
+                if (!string.IsNullOrEmpty(search)) parameters.Add("search", search);
+                if (!string.IsNullOrEmpty(type)) parameters.Add("type", type);
+
+                parameters.Add("limit", limit.ToString());
+                parameters.Add("is_tradable", isTradable ? "true" : "false");
+
+                result = await SendRestApiRequestAsync(
+                   function: LemonMarketsEndpoints.instruments,
+                   additionalParameters: parameters
+                   )
+                    .ConfigureAwait(false);
+
+                LemonMarketsInstrumentsRespone info = JsonConvert.DeserializeObject<LemonMarketsInstrumentsRespone>(result.Result);
+                return info;
+            }
+            catch (JsonException jecx)
+            {
+                OnError(new LemonMarketsJsonConvertEventArgs()
+                {
+                    Exception = jecx,
+                    OriginalString = result.Result,
+                    TargetType = nameof(IsOnline),
+                    Message = jecx.Message,
+                });
+                return returnValue;
+            }
+            catch (Exception exc)
+            {
+                OnError(new UnhandledExceptionEventArgs(exc, false));
+                return returnValue;
+            }
+        }
+
+        public async Task<LemonMarketsInstrumentsRespone> ListInstrumentsAsync(List<string> isins, int limit = 10, bool isTradable = true)
+        {
+            return await ListInstrumentsAsync(isin: string.Join(",", isins), limit: limit, isTradable: isTradable).ConfigureAwait(false);
+        }
+
+        public async Task<LemonMarketsQuotesRespone> GetLatestQuotesAsync(string isin)
+        {
+            LemonMarketsQuotesRespone returnValue = new();
+            LemonMarketsApiRequestRespone result = new();
+            try
+            {
+                if (Api != LemonMarketsAPIEndpoints.DevBrokerage)
+                {
+                    throw new NotSupportedException(
+                        $"This function is only supported for the market data endpoint '{LemonMarketsAPIEndpoints.DevBrokerage}'! You are currently connected to '{Api} => {Address}'"
+                        );
+                }
+
+                result = await SendRestApiRequestAsync(
+                   function: LemonMarketsEndpoints.quotes,
+                   requestTargetUri: $"{LemonMarketsEndpoints.instruments}/{isin}/quote"
+                   //additionalParameters: parameters
+                   )
+                    .ConfigureAwait(false);
+
+                LemonMarketsQuotesRespone info = JsonConvert.DeserializeObject<LemonMarketsQuotesRespone>(result.Result);
+                return info;
+            }
+            catch (JsonException jecx)
+            {
+                OnError(new LemonMarketsJsonConvertEventArgs()
+                {
+                    Exception = jecx,
+                    OriginalString = result.Result,
+                    TargetType = nameof(IsOnline),
+                    Message = jecx.Message,
+                });
+                return returnValue;
+            }
+            catch (Exception exc)
+            {
+                OnError(new UnhandledExceptionEventArgs(exc, false));
+                return returnValue;
+            }
+        }
+
         #endregion
 
         #endregion

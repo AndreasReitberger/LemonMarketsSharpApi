@@ -6,6 +6,7 @@
         LiveTrading,
         PaperTrading,
         LiveStreaming,
+        DevBrokerage,
         Undefined,
     }
 }

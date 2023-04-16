@@ -521,5 +521,34 @@ namespace LemonMarketsStocksApiSharp.Test
                 Assert.Fail(exc.Message);
             }
         }
+
+
+        [Test]
+        public async Task DevBrokerageTest()
+        {
+            try
+            {
+                LemonMarketsClient client = new LemonMarketsClient.LemonMarketsConnectionBuilder()
+                    .WithWebAddressAndApiKey(webAddress: LemonMarketsAPIs.DevBrokerageApi, apiKey: api_data)
+                    .Build();
+                Assert.IsNotNull(client);
+                client.Error += (sender, args) =>
+                {
+                    if (args is UnhandledExceptionEventArgs unhandled)
+                    {
+                        Assert.Fail($"{unhandled.ExceptionObject}");
+                    }
+                };
+                await client.CheckOnlineAsync();
+                Assert.IsTrue(client.IsOnline);
+
+                var instruments = await client.ListInstrumentsAsync();
+                Assert.IsTrue(instruments?.Results?.Count > 0);
+            }
+            catch (Exception exc)
+            {
+                Assert.Fail(exc.Message);
+            }
+        }
     }
 }
